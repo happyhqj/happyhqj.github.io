@@ -1,0 +1,265 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>题解 CF1003D 【Coins and Queries】 | Gridea</title>
+<link rel="shortcut icon" href="https://happyhqj.github.io/favicon.ico?v=1586680998991">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://happyhqj.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="题解 CF1003D 【Coins and Queries】 | Gridea - Atom Feed" href="https://happyhqj.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="当我看到这道题时非常懵，竟把它当成了一道搜索题？（请容忍我的菜）。为了不让其他的人像我一样折腾了一个小时，我就仔细讲解一下如何贪心以及贪心证明。
+1.如何贪心：
+从大到小循环数的数值，每次竟可能的去取当前的数。如果刚好能凑成答案，则输出取的..." />
+    <meta name="keywords" content="贪心,算法,map,洛谷题解" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://happyhqj.github.io">
+  <img class="avatar" src="https://happyhqj.github.io/images/avatar.png?v=1586680998991" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              题解 CF1003D 【Coins and Queries】
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-09
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://happyhqj.github.io/tag/6FJYGgbQZ/" class="post-tag">
+                  # 贪心
+                </a>
+              
+                <a href="https://happyhqj.github.io/tag/YWUTuHImq/" class="post-tag">
+                  # 算法
+                </a>
+              
+                <a href="https://happyhqj.github.io/tag/zVLcA8wdd/" class="post-tag">
+                  # map
+                </a>
+              
+                <a href="https://happyhqj.github.io/tag/eiyKlKpko/" class="post-tag">
+                  # 洛谷题解
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>当我看到这道题时非常懵，竟把它当成了一道搜索题？（<s>请容忍我的菜</s>）。为了不让其他的人像我一样折腾了一个小时，我就仔细讲解一下如何贪心以及贪心证明。</p>
+<h3 id="1如何贪心"><strong>1.如何贪心：</strong></h3>
+<p><strong>从大到小</strong>循环数的数值，每次竟可能的去取当前的数。如果刚好能<strong>凑成答案</strong>，则输出取的数的数目，<strong>不能则输出-1</strong>.</p>
+<h3 id="2贪心证明"><strong>2.贪心证明：</strong></h3>
+<p>先给你们看一句非常重要的话：<strong>第二行给你n个硬币的面值（保证都是2的次幂！）</strong>。这句话说明<strong>每大个数都是小数的倍数</strong>，如果是这样就好证明了。</p>
+<h3 id="3开始证明"><strong>3.开始证明：</strong></h3>
+<p>许多人可能会想，这种贪心方式会导致本能凑成的数最终凑不成。假设导致凑不成的数是8，则按他们的说法就是把8去掉，再拿一些小一点的数最终凑成答案，<strong>但不管怎么说，他所说的小一点的数都是8的因数，最终肯定会先把8给补上，再把剩下的补上，那么这就是一个无意义的操作</strong>。这就证明了这个策略是最优的，并且不存在任何问题。</p>
+<h3 id="下面上代码解释的相当清楚"><strong>下面上代码(解释的相当清楚)：</strong></h3>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int n,q,a,b;
+map&lt;int,int&gt; m;//可以说map是一个高级的桶，只不过这个桶非常大 
+int main(){   //之所以要用它是就是因为这个桶非常大......
+	int i;
+	scanf(&quot;%d%d&quot;,&amp;n,&amp;q);//n个硬币，q次询问 
+	for(i=1;i&lt;=n;i++){
+		scanf(&quot;%d&quot;,&amp;a);//读入每个硬币的值 
+		m[a]++;//把每一种硬币的值的个数存在map数组里 
+	}
+	map&lt;int,int&gt;::iterator it;//指针 
+	for(i=1;i&lt;=q;i++){
+		int ans=0;
+		scanf(&quot;%d&quot;,&amp;b);//询问的数值 
+		it=m.end();
+		while(1){
+			it--;//每次从大到小找硬币 
+			int minn=min(b/(it-&gt;first),it-&gt;second);//求出最多能取多少个这种硬币 
+			b-=minn*(it-&gt;first);//减去取走的硬币总值 
+			ans+=minn;//加上取走的数目 
+			if(it==m.begin() &amp;&amp; b!=0){//如果到了最后还没有凑成 
+				printf(&quot;-1\n&quot;);
+				break;
+			}else if(b==0){//注意！！这块不能用else否则第一次循环就会跳出 
+				printf(&quot;%d\n&quot;,ans);
+				break;
+			}
+		}
+	}
+	//over! 
+	return 0;
+}
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E5%A6%82%E4%BD%95%E8%B4%AA%E5%BF%83"><strong>1.如何贪心：</strong></a></li>
+<li><a href="#2%E8%B4%AA%E5%BF%83%E8%AF%81%E6%98%8E"><strong>2.贪心证明：</strong></a></li>
+<li><a href="#3%E5%BC%80%E5%A7%8B%E8%AF%81%E6%98%8E"><strong>3.开始证明：</strong></a></li>
+<li><a href="#%E4%B8%8B%E9%9D%A2%E4%B8%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E7%9A%84%E7%9B%B8%E5%BD%93%E6%B8%85%E6%A5%9A"><strong>下面上代码(解释的相当清楚)：</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://happyhqj.github.io/post/hello-gridea/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '9149373a39ffee2d82d9',
+    clientSecret: 'df794c13cd237e9ce4c8acb7b5a10484b2d0fcd1',
+    repo: 'jasonhqj.github.io',
+    owner: 'jasonhqj',
+    admin: ['jasonhqj'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://happyhqj.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

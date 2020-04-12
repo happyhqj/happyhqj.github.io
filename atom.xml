@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://happyhqj.github.io</id>
+    <title>Gridea</title>
+    <updated>2020-04-12T08:43:30.101Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://happyhqj.github.io"/>
+    <link rel="self" href="https://happyhqj.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://happyhqj.github.io/images/avatar.png</logo>
+    <icon>https://happyhqj.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[题解 CF1003D 【Coins and Queries】]]></title>
+        <id>https://happyhqj.github.io/post/ti-jie-cf1003d-coins-and-queries/</id>
+        <link href="https://happyhqj.github.io/post/ti-jie-cf1003d-coins-and-queries/">
+        </link>
+        <updated>2020-04-09T08:14:10.000Z</updated>
+        <content type="html"><![CDATA[<p>当我看到这道题时非常懵，竟把它当成了一道搜索题？（<s>请容忍我的菜</s>）。为了不让其他的人像我一样折腾了一个小时，我就仔细讲解一下如何贪心以及贪心证明。</p>
+<h3 id="1如何贪心"><strong>1.如何贪心：</strong></h3>
+<p><strong>从大到小</strong>循环数的数值，每次竟可能的去取当前的数。如果刚好能<strong>凑成答案</strong>，则输出取的数的数目，<strong>不能则输出-1</strong>.</p>
+<h3 id="2贪心证明"><strong>2.贪心证明：</strong></h3>
+<p>先给你们看一句非常重要的话：<strong>第二行给你n个硬币的面值（保证都是2的次幂！）</strong>。这句话说明<strong>每大个数都是小数的倍数</strong>，如果是这样就好证明了。</p>
+<h3 id="3开始证明"><strong>3.开始证明：</strong></h3>
+<p>许多人可能会想，这种贪心方式会导致本能凑成的数最终凑不成。假设导致凑不成的数是8，则按他们的说法就是把8去掉，再拿一些小一点的数最终凑成答案，<strong>但不管怎么说，他所说的小一点的数都是8的因数，最终肯定会先把8给补上，再把剩下的补上，那么这就是一个无意义的操作</strong>。这就证明了这个策略是最优的，并且不存在任何问题。</p>
+<h3 id="下面上代码解释的相当清楚"><strong>下面上代码(解释的相当清楚)：</strong></h3>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+int n,q,a,b;
+map&lt;int,int&gt; m;//可以说map是一个高级的桶，只不过这个桶非常大 
+int main(){   //之所以要用它是就是因为这个桶非常大......
+	int i;
+	scanf(&quot;%d%d&quot;,&amp;n,&amp;q);//n个硬币，q次询问 
+	for(i=1;i&lt;=n;i++){
+		scanf(&quot;%d&quot;,&amp;a);//读入每个硬币的值 
+		m[a]++;//把每一种硬币的值的个数存在map数组里 
+	}
+	map&lt;int,int&gt;::iterator it;//指针 
+	for(i=1;i&lt;=q;i++){
+		int ans=0;
+		scanf(&quot;%d&quot;,&amp;b);//询问的数值 
+		it=m.end();
+		while(1){
+			it--;//每次从大到小找硬币 
+			int minn=min(b/(it-&gt;first),it-&gt;second);//求出最多能取多少个这种硬币 
+			b-=minn*(it-&gt;first);//减去取走的硬币总值 
+			ans+=minn;//加上取走的数目 
+			if(it==m.begin() &amp;&amp; b!=0){//如果到了最后还没有凑成 
+				printf(&quot;-1\n&quot;);
+				break;
+			}else if(b==0){//注意！！这块不能用else否则第一次循环就会跳出 
+				printf(&quot;%d\n&quot;,ans);
+				break;
+			}
+		}
+	}
+	//over! 
+	return 0;
+}
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://happyhqj.github.io/post/hello-gridea/</id>
+        <link href="https://happyhqj.github.io/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="http://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>
